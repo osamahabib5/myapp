@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 export default class CreateToDo extends Component {
     constructor(props) {
@@ -20,17 +21,17 @@ export default class CreateToDo extends Component {
     onchangeTodoDescription(e) {            //to update the properties
         this.setState({
             todo_description: e.target.value
-        })
+        });
     }
     onchangeTodoResponsible(e) {
         this.setState({
             todo_responsible: e.target.value
-        })
+        });
     }
     onchangeTodoPriority(e) {
         this.setState({
             todo_priority: e.target.value
-        })
+        });
     }
 
     onSubmit(e) {
@@ -40,6 +41,20 @@ export default class CreateToDo extends Component {
         console.log(`Todo responsible: ${this.state.todo_responsible}`);
         console.log(`Todo Priority: ${this.state.todo_priority}`);
         console.log(`Todo Completed: ${this.state.todo_completed}`);
+
+        //insert into server
+        const newTodo = {
+            todo_description: this.state.todo_description,
+            todo_responsible: this.state.todo_responsible,
+            todo_priority: this.state.todo_priority,
+            todo_completed: this.state.todo_completed
+        }
+
+        //endpoint which accepts incoming host requests from 
+        //todo, i.e sending request to servers
+        axios.post("http://localhost:4000/todos/add",
+            newTodo).then(res => console.log(res.data));
+
         //we are doing this to prevent the default behaviour of the submit button to happen
         this.setState({     //we are doing this to reset the value once the submit button is clicked
             todo_description: '',
